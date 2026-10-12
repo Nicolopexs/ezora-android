@@ -1,0 +1,44 @@
+name: Android build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Compilar APK de prueba (Cassará y EZORA)
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace assembleCassaraDebug assembleEzoraDebug
+
+      - name: Subir APK de prueba de Cassará
+        uses: actions/upload-artifact@v4
+        with:
+          name: cassara-debug-apk
+          path: app/build/outputs/apk/cassara/debug/*.apk
+          retention-days: 14
+
+      - name: Subir APK de prueba de EZORA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ezora-debug-apk
+          path: app/build/outputs/apk/ezora/debug/*.apk
+          retention-days: 14

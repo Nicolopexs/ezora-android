@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EZORA: provisional hasta tener la marca definitiva -->
+    <color name="brand_primary">#FF0F766E</color>
+    <color name="ic_launcher_background">#FF0F766E</color>
+</resources>
